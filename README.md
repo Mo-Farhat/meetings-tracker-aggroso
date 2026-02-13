@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MeetTrack — Meeting Action Items Tracker
 
-## Getting Started
+A lightweight web application that converts meeting transcripts into structured action items using AI. Built as an interview assessment demonstrating full-stack engineering skills.
 
-First, run the development server:
+## 🚀 Live Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+> _Add Vercel deployment URL here_
+
+## ✨ Features
+
+- **AI-Powered Extraction** — Paste a transcript, get structured action items automatically
+- **CRUD Management** — Add, edit, delete, and toggle action items
+- **Transcript History** — View last 5 processed transcripts
+- **System Health** — Real-time status page for all services
+- **Dual LLM Fallback** — Groq primary → OpenRouter secondary for reliability
+- **Dark Mode** — Automatic via `prefers-color-scheme`
+
+## 🏗️ Tech Stack
+
+| Layer      | Technology                                    |
+| ---------- | --------------------------------------------- |
+| Frontend   | Next.js 16 (App Router), React 19, TypeScript |
+| Styling    | Tailwind CSS v4 + CSS custom properties       |
+| Backend    | Next.js API Routes (REST)                     |
+| Database   | Neon PostgreSQL + Prisma ORM                  |
+| LLM        | Groq API (primary), OpenRouter (fallback)     |
+| Validation | Zod schemas                                   |
+| Hosting    | Vercel                                        |
+
+## 📐 Architecture
+
+```
+┌──────────────────────────────────────────────┐
+│  Frontend (Next.js App Router)               │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐     │
+│  │  Home    │ │ History  │ │  Status  │     │
+│  └────┬─────┘ └────┬─────┘ └────┬─────┘     │
+│       │             │            │           │
+├───────┴─────────────┴────────────┴───────────┤
+│  API Routes (REST)                           │
+│  /api/transcripts  /api/action-items         │
+│  /api/history      /api/health/*             │
+├──────────────────────────────────────────────┤
+│  Service Layer                               │
+│  TranscriptService  ActionItemService        │
+│  LLMService (Groq → OpenRouter fallback)     │
+├──────────────────────────────────────────────┤
+│  Data Layer                                  │
+│  Prisma ORM → Neon PostgreSQL                │
+└──────────────────────────────────────────────┘
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 18+
+- A [Neon](https://neon.tech) PostgreSQL database (free tier works)
+- A [Groq](https://console.groq.com) API key (free tier works)
+- Optionally, an [OpenRouter](https://openrouter.ai) API key for fallback
 
-## Learn More
+### Neon Database Setup
 
-To learn more about Next.js, take a look at the following resources:
+1. Go to [neon.tech](https://neon.tech) and sign up (free)
+2. Click **"New Project"** → name it `meeting-tracker`
+3. Select a region closest to your Vercel deployment
+4. Copy the connection string (starts with `postgresql://`)
+5. It will look like: `postgresql://user:password@ep-xxx.region.neon.tech/neondb?sslmode=require`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# Clone the repo
+git clone <repo-url>
+cd meeting-tracker
 
-## Deploy on Vercel
+# Install dependencies
+npm install
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Copy environment template and fill in your keys
+cp .env.example .env
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Generate Prisma client
+npx prisma generate
+
+# Push schema to Neon database
+npx prisma db push
+
+# Start dev server
+npm run dev
+```
+
+### Environment Variables
+
+| Variable             | Required | Description                        |
+| -------------------- | -------- | ---------------------------------- |
+| `DATABASE_URL`       | ✅       | Neon PostgreSQL connection string  |
+| `GROQ_API_KEY`       | ✅       | Groq API key for LLM extraction    |
+| `OPENROUTER_API_KEY` | ❌       | OpenRouter key (fallback provider) |
+
+## 📡 API Endpoints
+
+| Method   | Endpoint                | Purpose                         |
+| -------- | ----------------------- | ------------------------------- |
+| `POST`   | `/api/transcripts`      | Save transcript + extract items |
+| `GET`    | `/api/transcripts/:id`  | Get transcript + items          |
+| `GET`    | `/api/history`          | Last 5 transcripts              |
+| `POST`   | `/api/action-items`     | Create item manually            |
+| `PATCH`  | `/api/action-items/:id` | Update item fields              |
+| `DELETE` | `/api/action-items/:id` | Delete item                     |
+| `GET`    | `/api/health`           | Backend health                  |
+| `GET`    | `/api/health/db`        | Database connectivity           |
+| `GET`    | `/api/health/llm`       | LLM provider health             |
+
+## 📁 Project Structure
+
+```
+├── app/
+│   ├── api/           # 9 API route handlers
+│   ├── history/       # History page
+│   ├── status/        # Status page
+│   ├── layout.tsx     # Root layout + nav
+│   └── page.tsx       # Home page
+├── components/        # 7 React components
+├── lib/
+│   ├── prisma.ts      # Prisma singleton
+│   ├── llm.ts         # LLM service (dual provider)
+│   ├── validations.ts # Zod schemas
+│   └── services/      # Business logic layer
+├── prisma/
+│   └── schema.prisma  # Database schema
+└── docs (root)
+    ├── AI_NOTES.md
+    ├── ABOUTME.md
+    └── PROMPTS_USED.md
+```
+
+## 🚀 Deploy to Vercel
+
+1. Push code to GitHub
+2. Import project in [vercel.com](https://vercel.com)
+3. Add environment variables in Vercel dashboard
+4. Vercel auto-detects Next.js and deploys
+
+## 📄 License
+
+MIT
