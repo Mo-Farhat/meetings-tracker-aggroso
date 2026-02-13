@@ -2,11 +2,11 @@
 
 A lightweight web application that converts meeting transcripts into structured action items using AI. Built as an interview assessment demonstrating full-stack engineering skills.
 
-## 🚀 Live Demo
+## Live Demo
 
 > _Add Vercel deployment URL here_
 
-## ✨ Features
+## Features
 
 - **AI-Powered Extraction** — Paste a transcript, get structured action items automatically
 - **CRUD Management** — Add, edit, delete, and toggle action items
@@ -15,7 +15,7 @@ A lightweight web application that converts meeting transcripts into structured 
 - **Dual LLM Fallback** — Groq primary → OpenRouter secondary for reliability
 - **Dark Mode** — Automatic via `prefers-color-scheme`
 
-## 🏗️ Tech Stack
+## Tech Stack
 
 | Layer      | Technology                                    |
 | ---------- | --------------------------------------------- |
@@ -27,7 +27,7 @@ A lightweight web application that converts meeting transcripts into structured 
 | Validation | Zod schemas                                   |
 | Hosting    | Vercel                                        |
 
-## 📐 Architecture
+## Architecture
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -50,7 +50,7 @@ A lightweight web application that converts meeting transcripts into structured 
 └──────────────────────────────────────────────┘
 ```
 
-## 🛠️ Setup
+## Setup
 
 ### Prerequisites
 
@@ -98,7 +98,7 @@ npm run dev
 | `GROQ_API_KEY`       | ✅       | Groq API key for LLM extraction    |
 | `OPENROUTER_API_KEY` | ❌       | OpenRouter key (fallback provider) |
 
-## 📡 API Endpoints
+## API Endpoints
 
 | Method   | Endpoint                | Purpose                         |
 | -------- | ----------------------- | ------------------------------- |
@@ -112,7 +112,7 @@ npm run dev
 | `GET`    | `/api/health/db`        | Database connectivity           |
 | `GET`    | `/api/health/llm`       | LLM provider health             |
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── app/
@@ -135,13 +135,13 @@ npm run dev
     └── PROMPTS_USED.md
 ```
 
-## 🚀 Deploy to Vercel
+## Deploy to Vercel
 
 1. Push code to GitHub
 2. Import project in [vercel.com](https://vercel.com)
 3. Add environment variables in Vercel dashboard
 4. Vercel auto-detects Next.js and deploys
 
-## 📄 License
+## License
 
 MIT
