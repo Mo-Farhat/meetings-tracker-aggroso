@@ -1,4 +1,4 @@
-# MeetTrack — Meeting Action Items Tracker
+# Meeting Action Items Tracker
 
 A lightweight web application that converts meeting transcripts into structured action items using AI. Built as an interview assessment demonstrating full-stack engineering skills.
 
