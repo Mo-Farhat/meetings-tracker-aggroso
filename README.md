@@ -4,7 +4,7 @@ A lightweight web application that converts meeting transcripts into structured 
 
 ## Live Demo
 
-> _Add Vercel deployment URL here_
+https://meetings-tracker-aggroso.vercel.app/
 
 ## Features
 
