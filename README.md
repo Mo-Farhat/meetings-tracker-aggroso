@@ -13,7 +13,6 @@ https://meetings-tracker-aggroso.vercel.app/
 - **Transcript History** — View last 5 processed transcripts
 - **System Health** — Real-time status page for all services
 - **Dual LLM Fallback** — Groq primary → OpenRouter secondary for reliability
-- **Dark Mode** — Automatic via `prefers-color-scheme`
 
 ## Tech Stack
 
@@ -134,14 +133,3 @@ npm run dev
     ├── ABOUTME.md
     └── PROMPTS_USED.md
 ```
-
-## Deploy to Vercel
-
-1. Push code to GitHub
-2. Import project in [vercel.com](https://vercel.com)
-3. Add environment variables in Vercel dashboard
-4. Vercel auto-detects Next.js and deploys
-
-## License
-
-MIT
