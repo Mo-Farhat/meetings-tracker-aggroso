@@ -6,9 +6,9 @@ This document provides transparency on how AI tools were used during development
 
 ### Coding Assistant
 
-- **Tool**: Gemini-based coding assistant (Antigravity)
+- **Tool**: Antigravtiy + Claude Code (due to antigravity's generous limits)
 - **Usage**: Architecture planning back and forths, code generation, debugging, and refactoring
-- **Scope**: All aspects of implementation including service layer design, API routes, component structure, and CSS design system
+- **Scope**: Most aspects of implementation including service layer, API routes, and CSS design system
 
 ### LLM Integration
 
@@ -33,4 +33,4 @@ This document provides transparency on how AI tools were used during development
 
 ## AI Prompt Strategy
 
-Structured JSON prompting with explicit schema requirements ensures reliable LLM output. See `PROMPTS_USED.md` for the specific prompts used for action item extraction.
+Structured JSON prompting with explicit schema requirements ensures reliable LLM output.
