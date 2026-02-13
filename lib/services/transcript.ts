@@ -61,7 +61,7 @@ export async function processTranscript(text: string): Promise<TranscriptWithIte
     });
 
     if (allTranscripts.length > MAX_HISTORY) {
-      const idsToDelete = allTranscripts.slice(MAX_HISTORY).map((t) => t.id);
+      const idsToDelete = allTranscripts.slice(MAX_HISTORY).map((t: { id: string }) => t.id);
       await tx.transcript.deleteMany({
         where: { id: { in: idsToDelete } },
       });
