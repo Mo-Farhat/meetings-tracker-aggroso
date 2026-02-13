@@ -7,7 +7,7 @@ This document provides transparency on how AI tools were used during development
 ### Coding Assistant
 
 - **Tool**: Gemini-based coding assistant (Antigravity)
-- **Usage**: Architecture planning, code generation, debugging, documentation
+- **Usage**: Architecture planning, code generation, debugging, and refactoring
 - **Scope**: All aspects of implementation including service layer design, API routes, component structure, and CSS design system
 
 ### LLM Integration
@@ -24,7 +24,6 @@ This document provides transparency on how AI tools were used during development
 - React component implementations
 - CSS design system
 - API route handlers
-- Documentation files
 
 ## Human Decisions
 
