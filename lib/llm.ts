@@ -1,4 +1,5 @@
 import { LLMResponseSchema, type LLMActionItem } from "./validations";
+import { log, logLLMUsage } from "./logger";
 
 // ── Types ────────────────────────────────────────────────────────
 interface LLMProvider {
@@ -71,16 +72,18 @@ export async function extractActionItems(
 
     try {
       const items = await callProvider(provider, apiKey, transcript);
+      log.llm.info({ provider: provider.name }, "Extraction succeeded");
       return { items, provider: provider.name };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       errors.push(`${provider.name}: ${message}`);
+      log.llm.warn({ provider: provider.name, error: message }, "Provider failed, trying next");
     }
   }
 
-  throw new Error(
-    `All LLM providers failed:\n${errors.map((e) => `  - ${e}`).join("\n")}`
-  );
+  const errorMsg = `All LLM providers failed:\n${errors.map((e) => `  - ${e}`).join("\n")}`;
+  log.llm.error({ errors }, errorMsg);
+  throw new Error(errorMsg);
 }
 
 /**
@@ -128,6 +131,7 @@ async function callProvider(
   apiKey: string,
   transcript: string
 ): Promise<LLMActionItem[]> {
+  const start = Date.now();
   const response = await fetch(provider.url, {
     method: "POST",
     headers: provider.buildHeaders(apiKey),
@@ -153,6 +157,18 @@ async function callProvider(
 
   const data = await response.json();
   const content = data.choices?.[0]?.message?.content;
+  const latencyMs = Date.now() - start;
+
+  // Track token usage from API response
+  const usage = data.usage;
+  logLLMUsage({
+    provider: provider.name,
+    model: provider.model,
+    promptTokens: usage?.prompt_tokens,
+    completionTokens: usage?.completion_tokens,
+    totalTokens: usage?.total_tokens,
+    latencyMs,
+  });
 
   if (!content) {
     throw new Error("Empty response from LLM");
@@ -161,7 +177,7 @@ async function callProvider(
   return parseLLMResponse(content);
 }
 
-function parseLLMResponse(content: string): LLMActionItem[] {
+export function parseLLMResponse(content: string): LLMActionItem[] {
   // Strip markdown code fences if the LLM wraps them
   let cleaned = content.trim();
   if (cleaned.startsWith("```")) {
