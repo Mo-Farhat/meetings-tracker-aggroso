@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { checkLLMHealth } from "@/lib/llm";
+import { log } from "@/lib/logger";
 
 // Cache the health check result for 60 seconds to avoid token waste
 let cachedResult: { data: unknown; timestamp: number } | null = null;
@@ -25,7 +26,7 @@ export async function GET() {
     const statusCode = result.status === "ok" ? 200 : 503;
     return NextResponse.json(responseData, { status: statusCode });
   } catch (err) {
-    console.error("LLM health check failed:", err);
+    log.llm.error({ err }, "LLM health check failed");
     return NextResponse.json(
       {
         status: "error",

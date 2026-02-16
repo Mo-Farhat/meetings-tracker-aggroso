@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ActionItemUpdateSchema } from "@/lib/validations";
 import { updateActionItem, deleteActionItem } from "@/lib/services/action-item";
+import { log } from "@/lib/logger";
 
 export async function PATCH(
   request: Request,
@@ -21,7 +22,7 @@ export async function PATCH(
     const item = await updateActionItem(id, parsed.data);
     return NextResponse.json(item);
   } catch (err) {
-    console.error("PATCH /api/action-items/[id] error:", err);
+    log.api.error({ err, path: "/api/action-items/[id]" }, "PATCH error");
 
     if (
       err instanceof Error &&
@@ -49,7 +50,7 @@ export async function DELETE(
     await deleteActionItem(id);
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("DELETE /api/action-items/[id] error:", err);
+    log.api.error({ err, path: "/api/action-items/[id]" }, "DELETE error");
 
     if (
       err instanceof Error &&

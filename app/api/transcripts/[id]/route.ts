@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getTranscriptById } from "@/lib/services/transcript";
+import { log } from "@/lib/logger";
 
 export async function GET(
   _request: Request,
@@ -18,7 +19,7 @@ export async function GET(
 
     return NextResponse.json(transcript);
   } catch (err) {
-    console.error("GET /api/transcripts/[id] error:", err);
+    log.api.error({ err, path: "/api/transcripts/[id]" }, "GET error");
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

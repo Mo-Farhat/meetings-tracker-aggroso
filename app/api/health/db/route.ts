@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { log } from "@/lib/logger";
 
 export async function GET() {
   const start = Date.now();
@@ -14,7 +15,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     });
   } catch (err) {
-    console.error("DB health check failed:", err);
+    log.db.error({ err }, "DB health check failed");
     return NextResponse.json(
       {
         status: "error",

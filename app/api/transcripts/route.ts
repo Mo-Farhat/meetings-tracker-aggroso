@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { TranscriptInputSchema } from "@/lib/validations";
 import { processTranscript } from "@/lib/services/transcript";
+import { log } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(transcript, { status: 201 });
   } catch (err) {
-    console.error("POST /api/transcripts error:", err);
+    log.api.error({ err, path: "/api/transcripts" }, "POST /api/transcripts error");
     const message = err instanceof Error ? err.message : "Internal server error";
     return NextResponse.json({ error: message }, { status: 500 });
   }
